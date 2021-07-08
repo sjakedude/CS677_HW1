@@ -18,7 +18,7 @@ ticker_file = os.path.join(input_dir, ticker + ".csv")
 weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 
 
-def calculate_table(r_all):
+def calculate_table(r_all, year):
     data = {
         "Day": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         "µ(R)": [],
@@ -45,15 +45,14 @@ def calculate_table(r_all):
 
         # Calculating the Standard Deviations
         standard_deviation_r_all = math.sqrt(
-            sum([a * a for a in r_all[weekday]]) / len(r_all[weekday])
-        ) - (mean_r_all * mean_r_all)
+            sum([(a - mean_r_all)**2 for a in r_all[weekday]]) / len(r_all[weekday])
+        )
         standard_deviation_r_neg = math.sqrt(
-            sum([a * a for a in r_neg]) / len(r_neg)
-        ) - (mean_r_neg * mean_r_neg)
+            sum([(a - mean_r_neg)**2 for a in r_neg]) / len(r_neg)
+        )
         standard_deviation_r_all = math.sqrt(
-            sum([a * a for a in r_pos]) / len(r_pos)
-        ) - (mean_r_pos * mean_r_pos)
-
+            sum([(a - mean_r_pos)**2 for a in r_pos]) / len(r_pos)
+        )
         # Putting the data into the columns for that weekday
         data["µ(R)"].append(mean_r_all)
         data["σ(R)"].append(standard_deviation_r_all)
@@ -78,8 +77,8 @@ def calculate_table(r_all):
             "σ(R+)",
         ],
     )
-
     print(df)
+    df.to_csv(year + ".csv", index=False)
 
 
 def load_data_from_file(year):
@@ -114,4 +113,4 @@ def load_data_from_file(year):
 for year in ["2014", "2015", "2016", "2017", "2018"]:
     print("===================== " + year + " =====================")
     r = load_data_from_file(year)
-    calculate_table(r)
+    calculate_table(r, year)
