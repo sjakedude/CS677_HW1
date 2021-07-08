@@ -45,13 +45,13 @@ def calculate_table(r_all, year):
 
         # Calculating the Standard Deviations
         standard_deviation_r_all = math.sqrt(
-            sum([(a - mean_r_all)**2 for a in r_all[weekday]]) / len(r_all[weekday])
+            sum([(a - mean_r_all) ** 2 for a in r_all[weekday]]) / len(r_all[weekday])
         )
         standard_deviation_r_neg = math.sqrt(
-            sum([(a - mean_r_neg)**2 for a in r_neg]) / len(r_neg)
+            sum([(a - mean_r_neg) ** 2 for a in r_neg]) / len(r_neg)
         )
         standard_deviation_r_all = math.sqrt(
-            sum([(a - mean_r_pos)**2 for a in r_pos]) / len(r_pos)
+            sum([(a - mean_r_pos) ** 2 for a in r_pos]) / len(r_pos)
         )
         # Putting the data into the columns for that weekday
         data["µ(R)"].append(mean_r_all)
