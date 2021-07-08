@@ -17,32 +17,8 @@ input_dir = r"D:\BU\Summer_01_2021\Homework_1\CS677_HW1\data\\"
 ticker_file = os.path.join(input_dir, ticker + ".csv")
 weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 
-try:
-    r_all = {"Monday": [], "Tuesday": [], "Wednesday": [], "Thursday": [], "Friday": []}
-    with open(ticker_file) as f:
-        lines = f.read().splitlines()
-    for line in lines[1::]:
-        tokens = line.split(",")
-        data_point = DataPoint(
-            tokens[0],
-            tokens[1],
-            tokens[2],
-            tokens[3],
-            tokens[4],
-            tokens[5],
-            tokens[6],
-            tokens[7],
-            tokens[8],
-            tokens[9],
-            tokens[10],
-            tokens[11],
-            tokens[12],
-            tokens[13],
-            tokens[14],
-            tokens[15],
-        )
-        r_all[data_point.weekday].append(data_point.day_return)
 
+def calculate_table(r_all):
     data = {
         "Day": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         "µ(R)": [],
@@ -105,6 +81,37 @@ try:
 
     print(df)
 
-except Exception as e:
-    print(e)
-    print("failed to read stock data for ticker: ", ticker)
+
+def load_data_from_file(year):
+    r = {"Monday": [], "Tuesday": [], "Wednesday": [], "Thursday": [], "Friday": []}
+    with open(ticker_file) as f:
+        lines = f.read().splitlines()
+    for line in lines[1::]:
+        tokens = line.split(",")
+        data_point = DataPoint(
+            tokens[0],
+            tokens[1],
+            tokens[2],
+            tokens[3],
+            tokens[4],
+            tokens[5],
+            tokens[6],
+            tokens[7],
+            tokens[8],
+            tokens[9],
+            tokens[10],
+            tokens[11],
+            tokens[12],
+            tokens[13],
+            tokens[14],
+            tokens[15],
+        )
+        if data_point.year == year:
+            r[data_point.weekday].append(data_point.day_return)
+    return r
+
+
+for year in ["2014", "2015", "2016", "2017", "2018"]:
+    print("===================== " + year + " =====================")
+    r = load_data_from_file(year)
+    calculate_table(r)
