@@ -43,44 +43,50 @@ try:
         )
         r_all[data_point.weekday].append(data_point.day_return)
 
-    # Splitting R into R, R- and R+
-    r_neg = [r for r in r_all["Monday"] if r < 0]
-    r_pos = [r for r in r_all["Monday"] if r > 0]
-
-    print("Total days: " + str(len(r_all["Monday"])))
-    print("Negative Days: " + str(len(r_neg)))
-    print("Positive Days: " + str(len(r_pos)))
-
-    # Calculating the Means
-    mean_r_all = sum(r_all["Monday"]) / len(r_all["Monday"])
-    mean_r_neg = sum(r_neg) / len(r_neg)
-    mean_r_pos = sum(r_pos) / len(r_pos)
-
-    # Calculating the Standard Deviations
-    standard_deviation_r_all = math.sqrt(
-        sum([a * a for a in r_all["Monday"]]) / len(r_all["Monday"])
-    ) - (mean_r_all * mean_r_all)
-    standard_deviation_r_all = math.sqrt(
-        sum([a * a for a in r_all["Monday"]]) / len(r_all["Monday"])
-    ) - (mean_r_all * mean_r_all)
-    standard_deviation_r_all = math.sqrt(
-        sum([a * a for a in r_all["Monday"]]) / len(r_all["Monday"])
-    ) - (mean_r_all * mean_r_all)
-
-    print("Mean of daily returns: " + str(mean_r_all))
-    print("Standard deviation: " + str(standard_deviation_r_all))
-
     data = {
         "Day": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        "µ(R)": ["1", "2", "3", "4", "5"],
-        "σ(R)": ["1", "2", "3", "4", "5"],
-        "|R−|": ["1", "2", "3", "4", "5"],
-        "µ(R−)": ["1", "2", "3", "4", "5"],
-        "σ(R−)": ["1", "2", "3", "4", "5"],
-        "|R+|": ["1", "2", "3", "4", "5"],
-        "µ(R+)": ["1", "2", "3", "4", "5"],
-        "σ(R+)": ["1", "2", "3", "4", "5"],
+        "µ(R)": [],
+        "σ(R)": [],
+        "|R−|": [],
+        "µ(R−)": [],
+        "σ(R−)": [],
+        "|R+|": [],
+        "µ(R+)": [],
+        "σ(R+)": [],
     }
+
+    # Looping through Monday - Friday
+    for weekday in weekdays:
+
+        # Splitting R into R, R- and R+
+        r_neg = [r for r in r_all[weekday] if r < 0]
+        r_pos = [r for r in r_all[weekday] if r > 0]
+
+        # Calculating the Means
+        mean_r_all = sum(r_all[weekday]) / len(r_all[weekday])
+        mean_r_neg = sum(r_neg) / len(r_neg)
+        mean_r_pos = sum(r_pos) / len(r_pos)
+
+        # Calculating the Standard Deviations
+        standard_deviation_r_all = math.sqrt(
+            sum([a * a for a in r_all[weekday]]) / len(r_all[weekday])
+        ) - (mean_r_all * mean_r_all)
+        standard_deviation_r_neg = math.sqrt(
+            sum([a * a for a in r_neg]) / len(r_neg)
+        ) - (mean_r_neg * mean_r_neg)
+        standard_deviation_r_all = math.sqrt(
+            sum([a * a for a in r_pos]) / len(r_pos)
+        ) - (mean_r_pos * mean_r_pos)
+
+        # Putting the data into the columns for that weekday
+        data["µ(R)"].append(mean_r_all)
+        data["σ(R)"].append(standard_deviation_r_all)
+        data["|R−|"].append(len(r_neg))
+        data["µ(R−)"].append(mean_r_neg)
+        data["σ(R−)"].append(standard_deviation_r_neg)
+        data["|R+|"].append(len(r_pos))
+        data["µ(R+)"].append(mean_r_pos)
+        data["σ(R+)"].append(standard_deviation_r_all)
 
     df = pd.DataFrame(
         data,
