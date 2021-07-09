@@ -67,6 +67,7 @@ def calculate_data(r_all):
 
 def load_data_from_file(year, file):
     r = {"Monday": [], "Tuesday": [], "Wednesday": [], "Thursday": [], "Friday": []}
+    r_basic = []
     with open(file) as f:
         lines = f.read().splitlines()
     for line in lines[1::]:
@@ -94,6 +95,10 @@ def load_data_from_file(year, file):
             r[data_point.weekday].append(data_point.day_return)
         if year == "ALL":
             r[data_point.weekday].append(data_point.day_return)
+        if year == "ALL-NOWEEKDAY":
+            r_basic.append(data_point.day_return)
+    if len(r_basic) > 0:
+        return r_basic
     return r
 
 
@@ -290,3 +295,76 @@ print("============================")
 print("SPY")
 print("\tBest day: " + best_day[0])
 print("\tWorst day: " + worst_day[0])
+
+
+# Question 4
+# Oracle - Day Trading
+# ======================
+r = load_data_from_file("ALL-NOWEEKDAY", ticker_file)
+print("============================")
+money = 100.00
+
+for day in r:
+    if day > 0:
+        money = money + (money * day)
+    elif day < 0:
+        money = money + (money * day)
+
+print(
+    "After 5 years of trading with SUN, starting with $100.00, we have: $"
+    + str(round(money, 2))
+)
+r = load_data_from_file("ALL-NOWEEKDAY", ticker_file_spy)
+print("============================")
+money = 100.00
+
+for day in r:
+    if day > 0:
+        money = money + (money * day)
+    elif day < 0:
+        money = money + (money * day)
+
+print(
+    "After 5 years of trading with SPY, starting with $100.00, we have: $"
+    + str(round(money, 2))
+)
+print("============================")
+
+# Question 5
+# Oracle - Buy and Hold
+# ======================
+r = load_data_from_file("ALL-NOWEEKDAY", ticker_file)
+print("============================")
+money = 100.00
+
+for day in r:
+    if day > 0:
+        money = money + (money * day)
+
+print(
+    "After 5 years of holding with SUN, starting with $100.00, we have: $"
+    + str(round(money, 2))
+)
+r = load_data_from_file("ALL-NOWEEKDAY", ticker_file_spy)
+print("============================")
+money = 100.00
+
+for day in r:
+    if day > 0:
+        money = money + (money * day)
+
+print(
+    "After 5 years of holding with SPY, starting with $100.00, we have: $"
+    + str(round(money, 2))
+)
+print("============================")
+
+
+# Question 6
+# Oracle - Taking Revenge
+# =======================
+
+
+
+
+
