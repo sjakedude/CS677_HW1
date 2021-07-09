@@ -13,11 +13,12 @@ import math
 ticker = "SUN"
 input_dir = r"D:\BU\Summer_01_2021\Homework_1\CS677_HW1\data\\"
 ticker_file = os.path.join(input_dir, ticker + ".csv")
+ticker_file_spy = os.path.join(input_dir, "SPY.csv")
 weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 full_dataset = []
 
 
-def calculate_data(r_all, year):
+def calculate_data(r_all):
     data = {
         "Day": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         "µ(R)": [],
@@ -64,9 +65,9 @@ def calculate_data(r_all, year):
     return data
 
 
-def load_data_from_file(year):
+def load_data_from_file(year, file):
     r = {"Monday": [], "Tuesday": [], "Wednesday": [], "Thursday": [], "Friday": []}
-    with open(ticker_file) as f:
+    with open(file) as f:
         lines = f.read().splitlines()
     for line in lines[1::]:
         tokens = line.split(",")
@@ -91,6 +92,8 @@ def load_data_from_file(year):
         full_dataset.append(data_point)
         if data_point.year == year:
             r[data_point.weekday].append(data_point.day_return)
+        if year == "ALL":
+            r[data_point.weekday].append(data_point.day_return)
     return r
 
 
@@ -112,8 +115,8 @@ def print_table(data):
 # Calculating and printing out the 5 tables
 for year in ["2016", "2017", "2018", "2019", "2020"]:
     print("===================== " + year + " =====================")
-    r = load_data_from_file(year)
-    data = calculate_data(r, year)
+    r = load_data_from_file(year, ticker_file)
+    data = calculate_data(r)
     print_table(data)
 
 # Total Gains and Losses
@@ -171,7 +174,6 @@ for weekday in weekdays:
 print("================================")
 print("Best / Worst days to be invested")
 print("================================")
-
 
 best_days = {}
 worst_days = {}
@@ -238,3 +240,53 @@ for year in dataset_by_year.keys():
     print("Year: " + year)
     print("\tBest day: " + best_day[0])
     print("\tWorst day: " + worst_day[0])
+
+# Best / Worst Days to be invested for each year
+print("=============================")
+print("Aggregate Tables from 5 years")
+print("=============================")
+
+print("SUN")
+print("============================")
+r = load_data_from_file("ALL", ticker_file)
+data = calculate_data(r)
+print_table(data)
+
+print("============================")
+print("SUN")
+best_day = ["Monday", 0]
+worst_day = ["Monday", 0]
+index = 0
+for weekday in weekdays:
+    if data["µ(R)"][index] > 0 and data["µ(R)"][index] > best_day[1]:
+        best_day[0] = weekday
+        best_day[1] = data["µ(R)"][index]
+    elif data["µ(R)"][index] < 0 and data["µ(R)"][index] < worst_day[1]:
+        worst_day[0] = weekday
+        worst_day[1] = data["µ(R)"][index]
+    index = index + 1
+print("\tBest day: " + best_day[0])
+print("\tWorst day: " + worst_day[0])
+
+print("============================")
+print("SPY")
+print("============================")
+r = load_data_from_file("ALL", ticker_file_spy)
+data = calculate_data(r)
+print_table(data)
+
+best_day = ["Monday", 0]
+worst_day = ["Monday", 0]
+index = 0
+for weekday in weekdays:
+    if data["µ(R)"][index] > 0 and data["µ(R)"][index] > best_day[1]:
+        best_day[0] = weekday
+        best_day[1] = data["µ(R)"][index]
+    elif data["µ(R)"][index] < 0 and data["µ(R)"][index] < worst_day[1]:
+        worst_day[0] = weekday
+        worst_day[1] = data["µ(R)"][index]
+    index = index + 1
+print("============================")
+print("SPY")
+print("\tBest day: " + best_day[0])
+print("\tWorst day: " + worst_day[0])
