@@ -9,16 +9,15 @@ constructs a list of lines
 from data_point import DataPoint
 import os
 import math
-import pandas as pd
-
 
 ticker = "SUN"
 input_dir = r"D:\BU\Summer_01_2021\Homework_1\CS677_HW1\data\\"
 ticker_file = os.path.join(input_dir, ticker + ".csv")
 weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+full_dataset = []
 
 
-def calculate_table(r_all, year):
+def calculate_data(r_all, year):
     data = {
         "Day": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         "µ(R)": [],
@@ -54,31 +53,15 @@ def calculate_table(r_all, year):
             sum([(a - mean_r_pos) ** 2 for a in r_pos]) / len(r_pos)
         )
         # Putting the data into the columns for that weekday
-        data["µ(R)"].append(mean_r_all)
-        data["σ(R)"].append(standard_deviation_r_all)
+        data["µ(R)"].append(round(mean_r_all, 4))
+        data["σ(R)"].append(round(standard_deviation_r_all, 4))
         data["|R−|"].append(len(r_neg))
-        data["µ(R−)"].append(mean_r_neg)
-        data["σ(R−)"].append(standard_deviation_r_neg)
+        data["µ(R−)"].append(round(mean_r_neg, 4))
+        data["σ(R−)"].append(round(standard_deviation_r_neg, 4))
         data["|R+|"].append(len(r_pos))
-        data["µ(R+)"].append(mean_r_pos)
-        data["σ(R+)"].append(standard_deviation_r_all)
-
-    df = pd.DataFrame(
-        data,
-        columns=[
-            "Day",
-            "µ(R)",
-            "σ(R)",
-            "|R−|",
-            "µ(R−)",
-            "σ(R−)",
-            "|R+|",
-            "µ(R+)",
-            "σ(R+)",
-        ],
-    )
-    print(df)
-    df.to_csv(year + ".csv", index=False)
+        data["µ(R+)"].append(round(mean_r_pos, 4))
+        data["σ(R+)"].append(round(standard_deviation_r_all, 4))
+    return data
 
 
 def load_data_from_file(year):
@@ -105,12 +88,153 @@ def load_data_from_file(year):
             tokens[14],
             tokens[15],
         )
+        full_dataset.append(data_point)
         if data_point.year == year:
             r[data_point.weekday].append(data_point.day_return)
     return r
 
 
-for year in ["2014", "2015", "2016", "2017", "2018"]:
+# Prints table in comma separated format to port to CSV
+def print_table(data):
+    for i in data:
+        print(i, end=",")
+    print()
+    for i in range(5):
+        for key in data.keys():
+            print(data[key][i], end=",")
+        print()
+
+
+# ======================
+# Main program execution
+# ======================
+
+# Calculating and printing out the 5 tables
+for year in ["2016", "2017", "2018", "2019", "2020"]:
     print("===================== " + year + " =====================")
     r = load_data_from_file(year)
-    calculate_table(r, year)
+    data = calculate_data(r, year)
+    print_table(data)
+
+# Total Gains and Losses
+total_loss = 0
+total_gain = 0
+
+print("=======================")
+print("Total Gains")
+
+for day in full_dataset:
+    if day.day_return > 0:
+        total_gain = total_gain + day.day_return
+    else:
+        total_loss = total_loss + day.day_return
+
+print("Total gains: " + str(total_gain))
+print("Total losses: " + str(abs(total_loss)))
+
+print("=======================")
+print("Total Gains (Per Weekday)")
+print("=======================")
+
+weekday_gain = {
+    "Monday": [],
+    "Tuesday": [],
+    "Wednesday": [],
+    "Thursday": [],
+    "Friday": [],
+}
+weekday_loss = {
+    "Monday": [],
+    "Tuesday": [],
+    "Wednesday": [],
+    "Thursday": [],
+    "Friday": [],
+}
+
+for day in full_dataset:
+    if day.day_return > 0:
+        weekday_gain[day.weekday].append(day.day_return)
+    else:
+        weekday_loss[day.weekday].append(day.day_return)
+
+for weekday in weekdays:
+    print(
+        weekday
+        + " Gains / Losses: "
+        + str(sum(weekday_gain[weekday]))
+        + "\t"
+        + str(abs(sum(weekday_loss[weekday])))
+    )
+    print()
+
+# Best / Worst Days to be invested for each year
+print("================================")
+print("Best / Worst days to be invested")
+print("================================")
+
+
+best_days = {}
+worst_days = {}
+
+dataset_by_year = {
+    "2016": {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+    },
+    "2017": {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+    },
+    "2018": {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+    },
+    "2019": {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+    },
+    "2020": {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+    },
+}
+
+for day in full_dataset:
+    dataset_by_year[day.year][day.weekday].append(day.day_return)
+
+for year in dataset_by_year.keys():
+    for weekday in weekdays:
+        dataset_by_year[year][weekday] = sum(dataset_by_year[year][weekday])
+
+for year in dataset_by_year.keys():
+    best_day = ["Monday", 0]
+    worst_day = ["Monday", 0]
+    for weekday in weekdays:
+        if (
+            dataset_by_year[year][weekday] > 0
+            and dataset_by_year[year][weekday] > best_day[1]
+        ):
+            best_day[0] = weekday
+        elif (
+            dataset_by_year[year][weekday] < 0
+            and dataset_by_year[year][weekday] < worst_day[1]
+        ):
+            worst_day[0] = weekday
+    print("Year: " + year)
+    print("\tBest day: " + best_day[0])
+    print("\tWorst day: " + worst_day[0])
