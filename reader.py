@@ -16,6 +16,7 @@ ticker_file = os.path.join(input_dir, ticker + ".csv")
 weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 full_dataset = []
 
+
 def calculate_data(r_all, year):
     data = {
         "Day": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
@@ -115,7 +116,7 @@ for year in ["2016", "2017", "2018", "2019", "2020"]:
     data = calculate_data(r, year)
     print_table(data)
 
-# Question 1, Part 4:
+# Total Gains and Losses
 total_loss = 0
 total_gain = 0
 
@@ -135,8 +136,20 @@ print("=======================")
 print("Total Gains (Per Weekday)")
 print("=======================")
 
-weekday_gain = {"Monday": [], "Tuesday": [], "Wednesday": [], "Thursday": [], "Friday": []}
-weekday_loss = {"Monday": [], "Tuesday": [], "Wednesday": [], "Thursday": [], "Friday": []}
+weekday_gain = {
+    "Monday": [],
+    "Tuesday": [],
+    "Wednesday": [],
+    "Thursday": [],
+    "Friday": [],
+}
+weekday_loss = {
+    "Monday": [],
+    "Tuesday": [],
+    "Wednesday": [],
+    "Thursday": [],
+    "Friday": [],
+}
 
 for day in full_dataset:
     if day.day_return > 0:
@@ -145,5 +158,83 @@ for day in full_dataset:
         weekday_loss[day.weekday].append(day.day_return)
 
 for weekday in weekdays:
-    print(weekday + " Gains / Losses: " + str(sum(weekday_gain[weekday])) + "\t" + str(abs(sum(weekday_loss[weekday]))))
+    print(
+        weekday
+        + " Gains / Losses: "
+        + str(sum(weekday_gain[weekday]))
+        + "\t"
+        + str(abs(sum(weekday_loss[weekday])))
+    )
     print()
+
+# Best / Worst Days to be invested for each year
+print("================================")
+print("Best / Worst days to be invested")
+print("================================")
+
+
+best_days = {}
+worst_days = {}
+
+dataset_by_year = {
+    "2016": {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+    },
+    "2017": {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+    },
+    "2018": {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+    },
+    "2019": {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+    },
+    "2020": {
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+    },
+}
+
+for day in full_dataset:
+    dataset_by_year[day.year][day.weekday].append(day.day_return)
+
+for year in dataset_by_year.keys():
+    for weekday in weekdays:
+        dataset_by_year[year][weekday] = sum(dataset_by_year[year][weekday])
+
+for year in dataset_by_year.keys():
+    best_day = ["Monday", 0]
+    worst_day = ["Monday", 0]
+    for weekday in weekdays:
+        if (
+            dataset_by_year[year][weekday] > 0
+            and dataset_by_year[year][weekday] > best_day[1]
+        ):
+            best_day[0] = weekday
+        elif (
+            dataset_by_year[year][weekday] < 0
+            and dataset_by_year[year][weekday] < worst_day[1]
+        ):
+            worst_day[0] = weekday
+    print("Year: " + year)
+    print("\tBest day: " + best_day[0])
+    print("\tWorst day: " + worst_day[0])
