@@ -364,7 +364,107 @@ print("============================")
 # Oracle - Taking Revenge
 # =======================
 
+def remove_ten_best(r):
+    a = r[:]
+    for i in range(10):
+        a.remove(max(a))
+    return a
+
+def remove_ten_worst(r):
+    b = r[:]
+    for i in range(10):
+        b.remove(min(b))
+    return b
+
+def remove_five_best_and_worst(r):
+    c = r[:]
+    for i in range(5):
+        c.remove(max(c))
+    for i in range(5):
+        c.remove(min(c))
+    return c
 
 
+r_sun = load_data_from_file("ALL-NOWEEKDAY", ticker_file)
+print("============================")
+print("SUN")
+print("============================")
 
+sun_a = remove_ten_best(r_sun)
+sun_b = remove_ten_worst(r_sun)
+sun_c = remove_five_best_and_worst(r_sun)
 
+# Q1 for SUN
+money = 100
+
+for day in sun_a:
+    if day > 0:
+        money = money + (money * day)
+    elif day < 0:
+        money = money + (money * day)
+
+print("Starting with $100, having removed the 10 best days: $" + str(round(money, 2)))
+
+# Q2 for SUN
+money = 100
+
+for day in sun_b:
+    if day > 0:
+        money = money + (money * day)
+    elif day < 0:
+        money = money + (money * day)
+
+print("Starting with $100, having removed the 10 worst days: $" + str(round(money, 2)))
+
+# Q3 for SUN
+money = 100
+
+for day in sun_c:
+    if day > 0:
+        money = money + (money * day)
+    elif day < 0:
+        money = money + (money * day)
+
+print("Starting with $100, having removed the 5 best and 5 worst days: $" + str(round(money, 2)))
+
+r_spy = load_data_from_file("ALL-NOWEEKDAY", ticker_file_spy)
+print("============================")
+print("SPY")
+print("============================")
+
+spy_a = remove_ten_best(r_spy)
+spy_b = remove_ten_worst(r_spy)
+spy_c = remove_five_best_and_worst(r_spy)
+
+# Q1 for SUN
+money = 100
+
+for day in spy_a:
+    if day > 0:
+        money = money + (money * day)
+    elif day < 0:
+        money = money + (money * day)
+
+print("Starting with $100, having removed the 10 best days: $" + str(round(money, 2)))
+
+# Q2 for SUN
+money = 100
+
+for day in spy_b:
+    if day > 0:
+        money = money + (money * day)
+    elif day < 0:
+        money = money + (money * day)
+
+print("Starting with $100, having removed the 10 worst days: $" + str(round(money, 2)))
+
+# Q3 for SUN
+money = 100
+
+for day in spy_c:
+    if day > 0:
+        money = money + (money * day)
+    elif day < 0:
+        money = money + (money * day)
+
+print("Starting with $100, having removed the 5 best and 5 worst days: $" + str(round(money, 2)))
