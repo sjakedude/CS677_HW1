@@ -1,3 +1,14 @@
+"""
+Jake Stephens
+Class: CS 677 - Summer 2
+Date: 7/13/2021
+Homework #1
+Description: This class is the model for 
+each row in the table of the raw csv data 
+from the yahoo finance API.
+"""
+
+
 class DataPoint:
     def __init__(
         self,

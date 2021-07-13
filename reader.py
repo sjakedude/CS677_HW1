@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
 """
-Created on Mon Nov  5 14:37:29 2018
-
-@author: epinsky
-this scripts reads your ticker file (e.g. MSFT.csv) and
-constructs a list of lines
+Jake Stephens
+Class: CS 677 - Summer 2
+Date: 7/13/2021
+Homework #1
+Description: This program makes many different calculations
+to analyze the stock data for 2 tickers, SUN and SPY.
 """
 from data_point import DataPoint
 import os
@@ -377,17 +377,20 @@ print("============================")
 # =======================
 print("QUESTION 6")
 
+
 def remove_ten_best(r):
     a = r[:]
     for i in range(10):
         a.remove(max(a))
     return a
 
+
 def remove_ten_worst(r):
     b = r[:]
     for i in range(10):
         b.remove(min(b))
     return b
+
 
 def remove_five_best_and_worst(r):
     c = r[:]
@@ -438,7 +441,10 @@ for day in sun_c:
     elif day < 0:
         money = money * (1 + day)
 
-print("Starting with $100, having removed the 5 best and 5 worst days: $" + str(round(money, 2)))
+print(
+    "Starting with $100, having removed the 5 best and 5 worst days: $"
+    + str(round(money, 2))
+)
 
 r_spy = load_data_from_file("ALL-NOWEEKDAY", ticker_file_spy)
 print("============================")
@@ -480,4 +486,7 @@ for day in spy_c:
     elif day < 0:
         money = money * (1 + day)
 
-print("Starting with $100, having removed the 5 best and 5 worst days: $" + str(round(money, 2)))
+print(
+    "Starting with $100, having removed the 5 best and 5 worst days: $"
+    + str(round(money, 2))
+)
