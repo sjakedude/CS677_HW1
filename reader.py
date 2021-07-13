@@ -119,6 +119,7 @@ def print_table(data):
 print("=======================")
 print("QUESTION 1")
 print("=======================")
+print("SUN TABLES")
 
 # Calculating and printing out the 5 tables
 for year in ["2016", "2017", "2018", "2019", "2020"]:
