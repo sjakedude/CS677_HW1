@@ -116,6 +116,9 @@ def print_table(data):
 # ======================
 # Main program execution
 # ======================
+print("=======================")
+print("QUESTION 1")
+print("=======================")
 
 # Calculating and printing out the 5 tables
 for year in ["2016", "2017", "2018", "2019", "2020"]:
@@ -174,8 +177,10 @@ for weekday in weekdays:
         + str(abs(sum(weekday_loss[weekday])))
     )
     print()
+print("================================")
 
 # Best / Worst Days to be invested for each year
+print("QUESTION 2")
 print("================================")
 print("Best / Worst days to be invested")
 print("================================")
@@ -245,8 +250,10 @@ for year in dataset_by_year.keys():
     print("Year: " + year)
     print("\tBest day: " + best_day[0])
     print("\tWorst day: " + worst_day[0])
+print("=============================")
 
 # Best / Worst Days to be invested for each year
+print("QUESTION 3")
 print("=============================")
 print("Aggregate Tables from 5 years")
 print("=============================")
@@ -295,20 +302,19 @@ print("============================")
 print("SPY")
 print("\tBest day: " + best_day[0])
 print("\tWorst day: " + worst_day[0])
-
+print("============================")
 
 # Question 4
 # Oracle - Day Trading
 # ======================
+print("QUESTION 4")
 r = load_data_from_file("ALL-NOWEEKDAY", ticker_file)
 print("============================")
 money = 100.00
 
 for day in r:
     if day > 0:
-        money = money + (money * day)
-    elif day < 0:
-        money = money + (money * day)
+        money = money * (1 + day)
 
 print(
     "After 5 years of trading with SUN, starting with $100.00, we have: $"
@@ -320,9 +326,7 @@ money = 100.00
 
 for day in r:
     if day > 0:
-        money = money + (money * day)
-    elif day < 0:
-        money = money + (money * day)
+        money = money * (1 + day)
 
 print(
     "After 5 years of trading with SPY, starting with $100.00, we have: $"
@@ -333,13 +337,17 @@ print("============================")
 # Question 5
 # Oracle - Buy and Hold
 # ======================
+print("QUESTION 5")
 r = load_data_from_file("ALL-NOWEEKDAY", ticker_file)
 print("============================")
 money = 100.00
+multiplier = 0
 
 for day in r:
     if day > 0:
-        money = money + (money * day)
+        multiplier = multiplier + day
+
+money = money * multiplier
 
 print(
     "After 5 years of holding with SUN, starting with $100.00, we have: $"
@@ -348,10 +356,13 @@ print(
 r = load_data_from_file("ALL-NOWEEKDAY", ticker_file_spy)
 print("============================")
 money = 100.00
+multiplier = 0
 
 for day in r:
     if day > 0:
-        money = money + (money * day)
+        multiplier = multiplier + day
+
+money = money * multiplier
 
 print(
     "After 5 years of holding with SPY, starting with $100.00, we have: $"
@@ -363,6 +374,7 @@ print("============================")
 # Question 6
 # Oracle - Taking Revenge
 # =======================
+print("QUESTION 6")
 
 def remove_ten_best(r):
     a = r[:]
@@ -399,9 +411,9 @@ money = 100
 
 for day in sun_a:
     if day > 0:
-        money = money + (money * day)
+        money = money * (1 + day)
     elif day < 0:
-        money = money + (money * day)
+        money = money * (1 + day)
 
 print("Starting with $100, having removed the 10 best days: $" + str(round(money, 2)))
 
@@ -410,9 +422,9 @@ money = 100
 
 for day in sun_b:
     if day > 0:
-        money = money + (money * day)
+        money = money * (1 + day)
     elif day < 0:
-        money = money + (money * day)
+        money = money * (1 + day)
 
 print("Starting with $100, having removed the 10 worst days: $" + str(round(money, 2)))
 
@@ -421,9 +433,9 @@ money = 100
 
 for day in sun_c:
     if day > 0:
-        money = money + (money * day)
+        money = money * (1 + day)
     elif day < 0:
-        money = money + (money * day)
+        money = money * (1 + day)
 
 print("Starting with $100, having removed the 5 best and 5 worst days: $" + str(round(money, 2)))
 
@@ -441,9 +453,9 @@ money = 100
 
 for day in spy_a:
     if day > 0:
-        money = money + (money * day)
+        money = money * (1 + day)
     elif day < 0:
-        money = money + (money * day)
+        money = money * (1 + day)
 
 print("Starting with $100, having removed the 10 best days: $" + str(round(money, 2)))
 
@@ -452,9 +464,9 @@ money = 100
 
 for day in spy_b:
     if day > 0:
-        money = money + (money * day)
+        money = money * (1 + day)
     elif day < 0:
-        money = money + (money * day)
+        money = money * (1 + day)
 
 print("Starting with $100, having removed the 10 worst days: $" + str(round(money, 2)))
 
@@ -463,8 +475,8 @@ money = 100
 
 for day in spy_c:
     if day > 0:
-        money = money + (money * day)
+        money = money * (1 + day)
     elif day < 0:
-        money = money + (money * day)
+        money = money * (1 + day)
 
 print("Starting with $100, having removed the 5 best and 5 worst days: $" + str(round(money, 2)))
